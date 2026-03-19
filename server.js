@@ -3,11 +3,13 @@ const express = require('express');
 const axios   = require('axios');
 const cors    = require('cors');
 const app     = express();
-app.use(cors({
-  origin: '*',
-  methods: ['GET','POST','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization']
-}));
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, anthropic-version, anthropic-dangerous-direct-browser-access, x-api-key');
+  if (req.method === 'OPTIONS') return res.sendStatus(200);
+  next();
+});
 
 const KEY = process.env.SEMRUSH_API_KEY;
 
